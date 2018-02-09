@@ -29,12 +29,12 @@ public class ComponentViewHolder {
 
         VirtualFile component = getComponentFiles(files, ".ts");
         VirtualFile template = getComponentFiles(files, ".html");
-        VirtualFile styling = getComponentFiles(files, ".css");
+//        VirtualFile styling = getComponentFiles(files, ".css");
 
 
         this.component = createEditor(component);
         this.template = createEditor(template);
-        this.styling = createEditor(styling);
+//        this.styling = createEditor(styling);
     }
 
     private VirtualFile getComponentFiles(List<VirtualFile> files, String extension) {
