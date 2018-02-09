@@ -1,19 +1,11 @@
 <idea-plugin>
-    <id>com.your.company.unique.plugin.id</id>
-    <name>Plugin display name here</name>
+    <id>nl.gerhardboer</id>
+    <name>Ng Component View</name>
     <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      Show the TypeScript class and Template in 1 TabView for the Real Component Feel
     ]]></description>
-
-    <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
-    </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="173.0"/>
@@ -29,15 +21,15 @@
         <fileEditorProvider implementation="editor.ComponentViewWindowProvider"/>
     </extensions>
 
-    <actions>
-        <!-- Add your actions here -->
-        <action class="OpenInComponentView" id="OpenInComponentView"
-                text="Open as @Component"
-                description="Opens the .ts and .html in a splitted view">
-            <add-to-group group-id="ProjectViewPopupMenuRunGroup"/>
+    <!--<actions>-->
+        <!--&lt;!&ndash; Add your actions here &ndash;&gt;-->
+        <!--<action class="OpenInComponentView" id="OpenInComponentView"-->
+                <!--text="Open as @Component"-->
+                <!--description="Opens the .ts and .html in a splitted view">-->
+            <!--<add-to-group group-id="ProjectViewPopupMenuRunGroup"/>-->
 
-        </action>
-    </actions>
+        <!--</action>-->
+    <!--</actions>-->
 
 
 
