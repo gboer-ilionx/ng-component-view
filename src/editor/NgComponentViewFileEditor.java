@@ -40,15 +40,20 @@ public class NgComponentViewFileEditor implements FileEditor {
 
         JPanel options = new JPanel(new FlowLayout());
 
-        for (NgComponentEditor editor : this.editors.all()) {
-            JCheckBox box = new JCheckBox("test");
+        JPanel content = new JPanel();
+
+
+        for (NgComponentEditor editor : this.editors.all) {
+            JCheckBox box = new JCheckBox(editor.name);
             box.setActionCommand(editor.name);
             box.setSelected(true);
             box.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String actionCommand = e.getActionCommand();
+                    JCheckBox box = (JCheckBox) e.getSource();
 
+                    editor.active = box.isSelected();
+                    recalculateContent(content);
                 }
             });
             options.add(box);
@@ -56,10 +61,26 @@ public class NgComponentViewFileEditor implements FileEditor {
 
         this.editorPanel.add(options, BorderLayout.NORTH);
 
-        JPanel content = new JPanel();
         gridlayout(content);
         this.editorPanel.add(content, BorderLayout.CENTER);
     }
+
+    private void recalculateContent(JPanel content) {
+        content.removeAll();
+        gridlayout(content);
+    }
+
+    private void gridlayout(JComponent panel) {
+        List<NgComponentEditor> editors = this.editors.activeWindows();
+        panel.setLayout(new GridLayout(1, editors.size()));
+
+        for (NgComponentEditor editor : editors) {
+            panel.add(editor.view);
+        }
+
+        panel.updateUI();
+    }
+
 
     private void splitGrid(JComponent content) {
         content.setLayout(new GridLayout(1, 1));
@@ -68,16 +89,6 @@ public class NgComponentViewFileEditor implements FileEditor {
         splitpane(splits);
 
         content.add(splits);
-    }
-
-
-    private void gridlayout(JComponent panel) {
-        List<NgComponentEditor> editors = this.editors.all();
-        panel.setLayout(new GridLayout(1, editors.size()));
-
-        for (NgComponentEditor editor : editors) {
-            panel.add(editor.view);
-        }
     }
 
     private void splitpane(JComponent panel) {

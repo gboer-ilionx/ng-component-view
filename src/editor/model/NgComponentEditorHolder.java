@@ -19,24 +19,20 @@ public class NgComponentEditorHolder {
     public NgComponentEditor template;
     public NgComponentEditor styling;
 
+    public List<NgComponentEditor> all;
 
     public NgComponentEditorHolder(Project project, VirtualFile componentDirectory) {
         this.project = project;
-        this.initComponentParts(componentDirectory);
+        this.init(componentDirectory);
     }
 
-
-    public List<NgComponentEditor> all() {
-        NgComponentEditor[] components = new NgComponentEditor[]{
-                this.component, this.template, this.styling
-        };
-
-        return Arrays.stream(components)
-                .filter((NgComponentEditor e) -> e.view != null)
+    public List<NgComponentEditor> activeWindows() {
+        return this.all.stream()
+                .filter(NgComponentEditor::isActive)
                 .collect(Collectors.toList());
     }
 
-    private void initComponentParts(VirtualFile componentDirectory) {
+    private void init(VirtualFile componentDirectory) {
         List<VirtualFile> files = Arrays.asList(componentDirectory.getChildren());
 
         VirtualFile component = getComponentFiles(files, ".ts");
@@ -47,11 +43,23 @@ public class NgComponentEditorHolder {
         this.component = createNgComponentEditor(component);
         this.template = createNgComponentEditor(template);
         this.styling = createNgComponentEditor(styling);
+
+        initComponentList();
+    }
+
+    private void initComponentList() {
+        NgComponentEditor[] components = new NgComponentEditor[]{
+                this.component, this.template, this.styling
+        };
+
+        this.all = Arrays.stream(components)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private VirtualFile getComponentFiles(List<VirtualFile> files, String extension) {
         List<VirtualFile> file = files.stream()
-                .filter((VirtualFile f) -> f.getName().contains(".view."))
+                .filter((VirtualFile f) -> f.getName().contains(".component."))
                 .filter((VirtualFile f) -> !f.getName().contains(".spec."))
                 .filter((VirtualFile f) -> f.getName().endsWith(extension))
                 .collect(Collectors.toList());
