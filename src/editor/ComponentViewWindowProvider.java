@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 public class ComponentViewWindowProvider implements FileEditorProvider {
 
 
-    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "component-view";
+    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-component-view";
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return virtualFile.getName().contains(".component.");
+        return virtualFile.getName().contains(".component.") && !virtualFile.getName().contains(".spec.");
     }
 
     @NotNull

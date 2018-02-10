@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 public class ComponentViewFileEditor implements FileEditor {
 
@@ -33,65 +34,81 @@ public class ComponentViewFileEditor implements FileEditor {
     }
 
     private void initView() {
-        this.editorPanel = new JPanel();
+        this.editorPanel = new JPanel(new BorderLayout());
+        JPanel options = new JPanel();
+        options.add(new JButton("test"));
+
 
         gridlayout(this.editorPanel);
+
+//        this.editorPanel.add(options, BorderLayout.NORTH);
+
+//        JPanel content = new JPanel();
+//        splitGrid(this.editorPanel);
 //        splitpane(this.editorPanel);
 //        gridbag(this.editorPanel);
+//
+//        this.editorPanel.add(content, BorderLayout.CENTER);
     }
 
-    private void gridlayout(JComponent editorPanel) {
-        editorPanel.setLayout(new GridLayout(1, this.editors.numberOfFiles()));
+    private void splitGrid(JComponent content) {
+        content.setLayout(new GridLayout(1, 1));
+        JPanel splits = new JPanel();
 
-        safeAddEditor(this.editors.component);
-        safeAddEditor(this.editors.template);
-        safeAddEditor(this.editors.styling);
+        splitpane(splits);
+
+        content.add(splits);
     }
 
-    private void safeAddEditor(JComponent c) {
-        if (c != null) {
-            editorPanel.add(c);
+
+    private void gridlayout(JComponent panel) {
+        List<JComponent> editors = this.editors.all();
+        panel.setLayout(new GridLayout(1, editors.size()));
+
+        for(JComponent editor: editors) {
+            editorPanel.add(editor);
         }
     }
 
-    private void splitpane(JComponent editorPanel) {
-        editorPanel.setLayout(new FlowLayout());
+    private void splitpane(JComponent panel) {
+        panel.setLayout(new FlowLayout());
 
         JSplitPane sp1 = createSplit(this.editors.component, this.editors.template);
 
         JSplitPane sp2 = createSplit(sp1, this.editors.styling);
 
-        editorPanel.add(sp2);
+        panel.add(sp2);
     }
 
-    private void gridbag(JComponent editorPanel) {
-        editorPanel.setLayout(new GridBagLayout());
+    private JSplitPane createSplit(JComponent left, JComponent right) {
+        return new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
+    }
+
+    private void gridbag(JComponent panel) {
+        panel.setLayout(new GridBagLayout());
 
         GridBagConstraints componentLayout = new GridBagConstraints();
         componentLayout.fill = GridBagConstraints.HORIZONTAL;
         componentLayout.gridx = 0;
         componentLayout.gridy = 0;
         componentLayout.weightx = 0.5;
-        editorPanel.add(this.editors.component, componentLayout);
+        panel.add(this.editors.component, componentLayout);
 
         GridBagConstraints templateLayout = new GridBagConstraints();
         templateLayout.fill = GridBagConstraints.VERTICAL;
         templateLayout.gridx = 0;
         templateLayout.gridy = 0;
         templateLayout.weightx = 0.5;
-        editorPanel.add(this.editors.template);
+        panel.add(this.editors.template);
 
         GridBagConstraints stylingLayout = new GridBagConstraints();
         stylingLayout.fill = GridBagConstraints.VERTICAL;
         stylingLayout.gridx = 0;
         stylingLayout.gridy = 0;
         stylingLayout.weightx = 0.2;
-        editorPanel.add(this.editors.styling);
+        panel.add(this.editors.styling);
     }
 
-    private JSplitPane createSplit(JComponent left, JComponent right) {
-        return new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, right);
-    }
 
     @NotNull
     @Override

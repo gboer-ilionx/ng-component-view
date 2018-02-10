@@ -7,6 +7,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ComponentViewHolder {
@@ -24,20 +25,13 @@ public class ComponentViewHolder {
         this.initComponentParts(componentDirectory);
     }
 
-    public int numberOfFiles() {
-        int count = 0;
 
-        count += fileExist(this.component);
-        count += fileExist(this.template);
-        count += fileExist(this.styling);
+    public List<JComponent> all() {
+        JComponent[] components = new JComponent[]{this.component, this.template, this.styling};
 
-        return count;
-    }
-
-    private int fileExist(JComponent component) {
-        return component == null
-                ? 0
-                : 1;
+        return Arrays.stream(components)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private void initComponentParts(VirtualFile componentDirectory) {
@@ -56,6 +50,7 @@ public class ComponentViewHolder {
     private VirtualFile getComponentFiles(List<VirtualFile> files, String extension) {
         List<VirtualFile> file = files.stream()
                 .filter((VirtualFile f) -> f.getName().contains(".component."))
+                .filter((VirtualFile f) -> !f.getName().contains(".spec."))
                 .filter((VirtualFile f) -> f.getName().endsWith(extension))
                 .collect(Collectors.toList());
 
