@@ -24,28 +24,49 @@ public class ComponentViewHolder {
         this.initComponentParts(componentDirectory);
     }
 
+    public int numberOfFiles() {
+        int count = 0;
+
+        count += fileExist(this.component);
+        count += fileExist(this.template);
+        count += fileExist(this.styling);
+
+        return count;
+    }
+
+    private int fileExist(JComponent component) {
+        return component == null
+                ? 0
+                : 1;
+    }
+
     private void initComponentParts(VirtualFile componentDirectory) {
         List<VirtualFile> files = Arrays.asList(componentDirectory.getChildren());
 
         VirtualFile component = getComponentFiles(files, ".ts");
         VirtualFile template = getComponentFiles(files, ".html");
-//        VirtualFile styling = getComponentFiles(files, ".css");
+        VirtualFile styling = getComponentFiles(files, ".css");
 
 
         this.component = createEditor(component);
         this.template = createEditor(template);
-//        this.styling = createEditor(styling);
+        this.styling = createEditor(styling);
     }
 
     private VirtualFile getComponentFiles(List<VirtualFile> files, String extension) {
-        return files.stream()
+        List<VirtualFile> file = files.stream()
                 .filter((VirtualFile f) -> f.getName().contains(".component."))
                 .filter((VirtualFile f) -> f.getName().endsWith(extension))
-                .collect(Collectors.toList())
-                .get(0);
+                .collect(Collectors.toList());
+
+        return file.size() == 1
+                ? file.get(0)
+                : null;
     }
 
     private JComponent createEditor(VirtualFile f) {
-        return TextEditorProvider.getInstance().createEditor(this.project, f).getComponent();
+        return f != null
+                ? TextEditorProvider.getInstance().createEditor(this.project, f).getComponent()
+                : null;
     }
 }

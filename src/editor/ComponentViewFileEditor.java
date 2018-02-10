@@ -41,11 +41,17 @@ public class ComponentViewFileEditor implements FileEditor {
     }
 
     private void gridlayout(JComponent editorPanel) {
-        editorPanel.setLayout(new GridLayout(1, 2));
+        editorPanel.setLayout(new GridLayout(1, this.editors.numberOfFiles()));
 
-        editorPanel.add(this.editors.component);
-        editorPanel.add(this.editors.template);
-//        editorPanel.add(this.editors.styling);
+        safeAddEditor(this.editors.component);
+        safeAddEditor(this.editors.template);
+        safeAddEditor(this.editors.styling);
+    }
+
+    private void safeAddEditor(JComponent c) {
+        if (c != null) {
+            editorPanel.add(c);
+        }
     }
 
     private void splitpane(JComponent editorPanel) {
