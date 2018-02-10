@@ -7,48 +7,58 @@ import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
-import editor.model.ComponentViewHolder;
+import editor.model.NgComponentEditor;
+import editor.model.NgComponentEditorHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-public class ComponentViewFileEditor implements FileEditor {
+public class NgComponentViewFileEditor implements FileEditor {
 
     private JComponent editorPanel;
 
-    private ComponentViewHolder editors;
+    private NgComponentEditorHolder editors;
 
     private VirtualFile componentDirectory;
 
 
-    ComponentViewFileEditor(Project project, VirtualFile virtualFile) {
-
+    NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
         this.componentDirectory = virtualFile.getParent();
-        this.editors = new ComponentViewHolder(project, componentDirectory);
+        this.editors = new NgComponentEditorHolder(project, componentDirectory);
 
         initView();
     }
 
     private void initView() {
         this.editorPanel = new JPanel(new BorderLayout());
-        JPanel options = new JPanel();
-        options.add(new JButton("test"));
 
+        JPanel options = new JPanel(new FlowLayout());
 
-        gridlayout(this.editorPanel);
+        for (NgComponentEditor editor : this.editors.all()) {
+            JCheckBox box = new JCheckBox("test");
+            box.setActionCommand(editor.name);
+            box.setSelected(true);
+            box.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String actionCommand = e.getActionCommand();
 
-//        this.editorPanel.add(options, BorderLayout.NORTH);
+                }
+            });
+            options.add(box);
+        }
 
-//        JPanel content = new JPanel();
-//        splitGrid(this.editorPanel);
-//        splitpane(this.editorPanel);
-//        gridbag(this.editorPanel);
-//
-//        this.editorPanel.add(content, BorderLayout.CENTER);
+        this.editorPanel.add(options, BorderLayout.NORTH);
+
+        JPanel content = new JPanel();
+        gridlayout(content);
+        this.editorPanel.add(content, BorderLayout.CENTER);
     }
 
     private void splitGrid(JComponent content) {
@@ -62,20 +72,20 @@ public class ComponentViewFileEditor implements FileEditor {
 
 
     private void gridlayout(JComponent panel) {
-        List<JComponent> editors = this.editors.all();
+        List<NgComponentEditor> editors = this.editors.all();
         panel.setLayout(new GridLayout(1, editors.size()));
 
-        for(JComponent editor: editors) {
-            editorPanel.add(editor);
+        for (NgComponentEditor editor : editors) {
+            panel.add(editor.view);
         }
     }
 
     private void splitpane(JComponent panel) {
         panel.setLayout(new FlowLayout());
 
-        JSplitPane sp1 = createSplit(this.editors.component, this.editors.template);
+        JSplitPane sp1 = createSplit(this.editors.component.view, this.editors.template.view);
 
-        JSplitPane sp2 = createSplit(sp1, this.editors.styling);
+        JSplitPane sp2 = createSplit(sp1, this.editors.styling.view);
 
         panel.add(sp2);
     }
@@ -92,21 +102,21 @@ public class ComponentViewFileEditor implements FileEditor {
         componentLayout.gridx = 0;
         componentLayout.gridy = 0;
         componentLayout.weightx = 0.5;
-        panel.add(this.editors.component, componentLayout);
+        panel.add(this.editors.component.view, componentLayout);
 
         GridBagConstraints templateLayout = new GridBagConstraints();
         templateLayout.fill = GridBagConstraints.VERTICAL;
         templateLayout.gridx = 0;
         templateLayout.gridy = 0;
         templateLayout.weightx = 0.5;
-        panel.add(this.editors.template);
+        panel.add(this.editors.template.view);
 
         GridBagConstraints stylingLayout = new GridBagConstraints();
         stylingLayout.fill = GridBagConstraints.VERTICAL;
         stylingLayout.gridx = 0;
         stylingLayout.gridy = 0;
         stylingLayout.weightx = 0.2;
-        panel.add(this.editors.styling);
+        panel.add(this.editors.styling.view);
     }
 
 

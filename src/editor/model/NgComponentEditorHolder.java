@@ -10,27 +10,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ComponentViewHolder {
+public class NgComponentEditorHolder {
 
 
     private Project project;
 
-    public JComponent component;
-    public JComponent template;
-    public JComponent styling;
+    public NgComponentEditor component;
+    public NgComponentEditor template;
+    public NgComponentEditor styling;
 
 
-    public ComponentViewHolder(Project project, VirtualFile componentDirectory) {
+    public NgComponentEditorHolder(Project project, VirtualFile componentDirectory) {
         this.project = project;
         this.initComponentParts(componentDirectory);
     }
 
 
-    public List<JComponent> all() {
-        JComponent[] components = new JComponent[]{this.component, this.template, this.styling};
+    public List<NgComponentEditor> all() {
+        NgComponentEditor[] components = new NgComponentEditor[]{
+                this.component, this.template, this.styling
+        };
 
         return Arrays.stream(components)
-                .filter(Objects::nonNull)
+                .filter((NgComponentEditor e) -> e.view != null)
                 .collect(Collectors.toList());
     }
 
@@ -42,14 +44,14 @@ public class ComponentViewHolder {
         VirtualFile styling = getComponentFiles(files, ".css");
 
 
-        this.component = createEditor(component);
-        this.template = createEditor(template);
-        this.styling = createEditor(styling);
+        this.component = createNgComponentEditor(component);
+        this.template = createNgComponentEditor(template);
+        this.styling = createNgComponentEditor(styling);
     }
 
     private VirtualFile getComponentFiles(List<VirtualFile> files, String extension) {
         List<VirtualFile> file = files.stream()
-                .filter((VirtualFile f) -> f.getName().contains(".component."))
+                .filter((VirtualFile f) -> f.getName().contains(".view."))
                 .filter((VirtualFile f) -> !f.getName().contains(".spec."))
                 .filter((VirtualFile f) -> f.getName().endsWith(extension))
                 .collect(Collectors.toList());
@@ -59,9 +61,13 @@ public class ComponentViewHolder {
                 : null;
     }
 
-    private JComponent createEditor(VirtualFile f) {
+    private NgComponentEditor createNgComponentEditor(VirtualFile f) {
         return f != null
-                ? TextEditorProvider.getInstance().createEditor(this.project, f).getComponent()
+                ? new NgComponentEditor(createEditor(f), f.getName())
                 : null;
+    }
+
+    private JComponent createEditor(VirtualFile f) {
+        return TextEditorProvider.getInstance().createEditor(this.project, f).getComponent();
     }
 }

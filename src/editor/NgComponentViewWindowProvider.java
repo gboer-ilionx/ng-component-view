@@ -7,20 +7,20 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
-public class ComponentViewWindowProvider implements FileEditorProvider {
+public class NgComponentViewWindowProvider implements FileEditorProvider {
 
 
-    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-component-view";
+    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-view-view";
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return virtualFile.getName().contains(".component.") && !virtualFile.getName().contains(".spec.");
+        return virtualFile.getName().contains(".view.") && !virtualFile.getName().contains(".spec.");
     }
 
     @NotNull
     @Override
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return new ComponentViewFileEditor(project, virtualFile);
+        return new NgComponentViewFileEditor(project, virtualFile);
     }
 
     @NotNull
