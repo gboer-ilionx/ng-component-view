@@ -18,19 +18,9 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <fileEditorProvider implementation="editor.NgComponentViewWindowProvider"/>
+        <fileEditorProvider implementation="providers.NgComponentViewFileEditorProvider"/>
+        <editorTabTitleProvider implementation="providers.NgComponentViewTitleProvider"/>
     </extensions>
-
-    <!--<actions>-->
-        <!--&lt;!&ndash; Add your actions here &ndash;&gt;-->
-        <!--<action class="OpenInComponentView" id="OpenInComponentView"-->
-                <!--text="Open as @Component"-->
-                <!--description="Opens the .ts and .html in a splitted view">-->
-            <!--<add-to-group group-id="ProjectViewPopupMenuRunGroup"/>-->
-
-        <!--</action>-->
-    <!--</actions>-->
-
 
 
 </idea-plugin>

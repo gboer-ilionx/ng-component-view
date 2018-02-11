@@ -21,8 +21,10 @@ public class NgComponentViewFileEditor implements FileEditor {
 
     private VirtualFile componentDirectory;
 
+    private String displayName;
 
-    NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
+
+    public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
         this.componentDirectory = virtualFile.getParent();
 
         NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(project, componentDirectory);
@@ -49,7 +51,7 @@ public class NgComponentViewFileEditor implements FileEditor {
     @NotNull
     @Override
     public String getName() {
-        return this.componentDirectory.getName();
+        return this.displayName;
     }
 
     @Override
@@ -113,5 +115,9 @@ public class NgComponentViewFileEditor implements FileEditor {
     @Override
     public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
 
+    }
+
+    public void setDisplayName(String name) {
+        this.displayName = name;
     }
 }

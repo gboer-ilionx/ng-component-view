@@ -1,13 +1,14 @@
-package editor;
+package providers;
 
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
 import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import editor.NgComponentViewFileEditor;
 import org.jetbrains.annotations.NotNull;
 
-public class NgComponentViewWindowProvider implements FileEditorProvider {
+public class NgComponentViewFileEditorProvider implements FileEditorProvider {
 
 
     public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-component-view";
@@ -20,7 +21,12 @@ public class NgComponentViewWindowProvider implements FileEditorProvider {
     @NotNull
     @Override
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return new NgComponentViewFileEditor(project, virtualFile);
+        NgComponentViewFileEditor ngComponentView = new NgComponentViewFileEditor(project, virtualFile);
+        ngComponentView.setDisplayName(virtualFile.getParent().getName());
+
+        return ngComponentView;
+
+//        return new NgComponentViewFileEditor(project, virtualFile);
     }
 
     @NotNull

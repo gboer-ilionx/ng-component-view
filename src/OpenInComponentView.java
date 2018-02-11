@@ -6,7 +6,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.Nullable;
 
-import static editor.NgComponentViewWindowProvider.COMPONENT_VIEW_EDITOR_TYPE_ID;
+import static providers.NgComponentViewFileEditorProvider.COMPONENT_VIEW_EDITOR_TYPE_ID;
 
 /**
  * Created by hendrikvonprince on 09/11/16.
