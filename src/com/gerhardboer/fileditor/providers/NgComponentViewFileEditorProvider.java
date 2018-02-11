@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class NgComponentViewFileEditorProvider implements FileEditorProvider {
 
 
-    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-component-com.gerhardboer.view";
+    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-component-view";
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
