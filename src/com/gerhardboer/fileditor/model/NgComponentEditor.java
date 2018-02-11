@@ -1,4 +1,4 @@
-package com.gerhardboer.model;
+package com.gerhardboer.fileditor.model;
 
 import javax.swing.*;
 

@@ -1,7 +1,7 @@
-package com.gerhardboer;
+package com.gerhardboer.fileditor;
 
-import com.gerhardboer.model.NgComponentEditorHolder;
-import com.gerhardboer.view.NgComponentPanel;
+import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
+import com.gerhardboer.fileditor.view.NgComponentPanel;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;

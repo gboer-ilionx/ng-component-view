@@ -1,4 +1,4 @@
-package com.gerhardboer.providers;
+package com.gerhardboer.fileditor.providers;
 
 import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.fileEditor.ex.FileEditorProviderManager;

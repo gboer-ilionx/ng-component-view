@@ -1,7 +1,7 @@
-package com.gerhardboer.view;
+package com.gerhardboer.fileditor.view;
 
-import com.gerhardboer.model.NgComponentEditor;
-import com.gerhardboer.model.NgComponentEditorHolder;
+import com.gerhardboer.fileditor.model.NgComponentEditor;
+import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package com.gerhardboer.model;
+package com.gerhardboer.fileditor.model;
 
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider;
 import com.intellij.openapi.project.Project;

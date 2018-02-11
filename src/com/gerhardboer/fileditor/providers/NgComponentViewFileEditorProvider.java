@@ -1,11 +1,11 @@
-package com.gerhardboer.providers;
+package com.gerhardboer.fileditor.providers;
 
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
 import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.gerhardboer.NgComponentViewFileEditor;
+import com.gerhardboer.fileditor.NgComponentViewFileEditor;
 import org.jetbrains.annotations.NotNull;
 
 public class NgComponentViewFileEditorProvider implements FileEditorProvider {
