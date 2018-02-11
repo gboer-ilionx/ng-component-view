@@ -21,12 +21,7 @@ public class NgComponentViewFileEditorProvider implements FileEditorProvider {
     @NotNull
     @Override
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        NgComponentViewFileEditor ngComponentView = new NgComponentViewFileEditor(project, virtualFile);
-        ngComponentView.setDisplayName(virtualFile.getParent().getName());
-
-        return ngComponentView;
-
-//        return new NgComponentViewFileEditor(project, virtualFile);
+        return new NgComponentViewFileEditor(project, virtualFile);
     }
 
     @NotNull
