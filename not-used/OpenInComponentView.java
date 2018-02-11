@@ -56,7 +56,7 @@ public class OpenInComponentView extends AnAction {
         PsiFile psiFile = e.getData(LangDataKeys.PSI_FILE);
 
 
-        if (psiFile == null && !psiFile.getName().contains(".view.")) {
+        if (psiFile == null && !psiFile.getName().contains(".com.gerhardboer.view.")) {
             e.getPresentation().setEnabled(false);
             return null;
         }

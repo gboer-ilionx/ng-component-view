@@ -1,17 +1,17 @@
-package providers;
+package com.gerhardboer.providers;
 
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
 import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import editor.NgComponentViewFileEditor;
+import com.gerhardboer.NgComponentViewFileEditor;
 import org.jetbrains.annotations.NotNull;
 
 public class NgComponentViewFileEditorProvider implements FileEditorProvider {
 
 
-    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-component-view";
+    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-component-com.gerhardboer.view";
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {

@@ -1,5 +1,7 @@
-package editor;
+package com.gerhardboer;
 
+import com.gerhardboer.model.NgComponentEditorHolder;
+import com.gerhardboer.view.NgComponentPanel;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
@@ -7,8 +9,6 @@ import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
-import editor.model.NgComponentEditorHolder;
-import editor.view.NgComponentPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

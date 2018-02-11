@@ -18,8 +18,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <fileEditorProvider implementation="providers.NgComponentViewFileEditorProvider"/>
-        <editorTabTitleProvider implementation="providers.NgComponentViewTitleProvider"/>
+        <fileEditorProvider implementation="com.gerhardboer.providers.NgComponentViewFileEditorProvider"/>
+        <editorTabTitleProvider implementation="com.gerhardboer.providers.NgComponentViewTitleProvider"/>
     </extensions>
 
 
