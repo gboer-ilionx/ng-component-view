@@ -12,14 +12,12 @@ import java.util.stream.Collectors;
 
 public class NgComponentEditorHolder {
 
-
     private Project project;
-
-    public NgComponentEditor component;
-    public NgComponentEditor template;
-    public NgComponentEditor styling;
-
     public List<NgComponentEditor> all;
+
+    private NgComponentEditor component;
+    private NgComponentEditor template;
+    private NgComponentEditor styling;
 
     public NgComponentEditorHolder(Project project, VirtualFile componentDirectory) {
         this.project = project;
@@ -35,6 +33,11 @@ public class NgComponentEditorHolder {
     private void init(VirtualFile componentDirectory) {
         List<VirtualFile> files = Arrays.asList(componentDirectory.getChildren());
 
+        initNgComponents(files);
+        initComponentList();
+    }
+
+    private void initNgComponents(List<VirtualFile> files) {
         VirtualFile component = getComponentFiles(files, ".ts");
         VirtualFile template = getComponentFiles(files, ".html");
         VirtualFile styling = getComponentFiles(files, ".css");
@@ -43,8 +46,6 @@ public class NgComponentEditorHolder {
         this.component = createNgComponentEditor(component);
         this.template = createNgComponentEditor(template);
         this.styling = createNgComponentEditor(styling);
-
-        initComponentList();
     }
 
     private void initComponentList() {

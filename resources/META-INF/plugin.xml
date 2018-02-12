@@ -18,7 +18,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <fileEditorProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewFileEditorProvider"/>
+        <fileEditorProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewFileEditorProvider" order="FIRST"/>
         <editorTabTitleProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewTitleProvider"/>
     </extensions>
 
