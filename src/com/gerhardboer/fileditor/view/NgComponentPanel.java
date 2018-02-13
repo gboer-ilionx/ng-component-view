@@ -64,16 +64,17 @@ public class NgComponentPanel extends JPanel {
     }
 
     private JCheckBox createHideShow(NgComponentEditor editor) {
-        String name = editor.name;
+        String fileName = editor.name;
+        String checkboxName = fileName.substring(editor.name.lastIndexOf(".") + 1);
 
-        JCheckBox box = new JCheckBox(name);
-        box.setActionCommand(name);
-        box.setSelected(this.fileState.get(name));
+        JCheckBox box = new JCheckBox(checkboxName);
+        box.setActionCommand(fileName);
+        box.setSelected(this.fileState.get(fileName));
 
         box.addActionListener(e -> {
             JCheckBox box1 = (JCheckBox) e.getSource();
             editor.active = box1.isSelected();
-            updateState(name, editor.active);
+            updateState(fileName, editor.active);
 
             recalculateContent();
         });
