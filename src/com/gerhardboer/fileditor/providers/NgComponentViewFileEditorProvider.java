@@ -15,7 +15,7 @@ public class NgComponentViewFileEditorProvider implements FileEditorProvider {
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return virtualFile.getName().contains(".component.") && !virtualFile.getName().contains(".spec.");
+        return virtualFile.getName().endsWith(".component-view");
     }
 
     @NotNull

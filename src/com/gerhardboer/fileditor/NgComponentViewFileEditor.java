@@ -22,16 +22,12 @@ public class NgComponentViewFileEditor implements FileEditor {
 
     private VirtualFile componentDirectory;
 
-    private String displayName;
-
-    private NgComponentViewState state;
-
     public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
-        this.state = NgComponentViewState.getInstance(project);
+        NgComponentViewState state = NgComponentViewState.getInstance(project);
         this.componentDirectory = virtualFile.getParent();
 
         NgComponentViewState.NgEditorOpenFileState fileState =
-                state.getFileState(this.componentDirectory.getName());
+                state.getFileState(componentDirectory.getName());
 
         NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
                 project, componentDirectory, fileState
@@ -59,7 +55,7 @@ public class NgComponentViewFileEditor implements FileEditor {
     @NotNull
     @Override
     public String getName() {
-        return this.displayName;
+        return componentDirectory.getName();
     }
 
     @Override
@@ -125,7 +121,4 @@ public class NgComponentViewFileEditor implements FileEditor {
 
     }
 
-    public void setDisplayName(String name) {
-        this.displayName = name;
-    }
 }
