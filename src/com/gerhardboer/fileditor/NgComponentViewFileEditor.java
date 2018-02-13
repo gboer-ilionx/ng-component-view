@@ -1,6 +1,7 @@
 package com.gerhardboer.fileditor;
 
 import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
+import com.gerhardboer.fileditor.state.NgComponentViewState;
 import com.gerhardboer.fileditor.view.NgComponentPanel;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.openapi.fileEditor.FileEditor;
@@ -23,17 +24,24 @@ public class NgComponentViewFileEditor implements FileEditor {
 
     private String displayName;
 
+    private NgComponentViewState state;
 
     public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
+        this.state = NgComponentViewState.getInstance(project);
         this.componentDirectory = virtualFile.getParent();
 
-        NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(project, componentDirectory);
+        NgComponentViewState.NgEditorOpenFileState fileState =
+                state.getFileState(this.componentDirectory.getName());
 
-        initView(editorHolder);
+        NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
+                project, componentDirectory, fileState
+        );
+
+        initView(editorHolder, fileState);
     }
 
-    private void initView(NgComponentEditorHolder editorHolder) {
-        this.editorPanel = new NgComponentPanel(editorHolder);
+    private void initView(NgComponentEditorHolder editorHolder, NgComponentViewState.NgEditorOpenFileState fileState) {
+        this.editorPanel = new NgComponentPanel(editorHolder, fileState);
     }
 
     @NotNull

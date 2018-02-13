@@ -2,6 +2,7 @@ package com.gerhardboer.fileditor.view;
 
 import com.gerhardboer.fileditor.model.NgComponentEditor;
 import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
+import com.gerhardboer.fileditor.state.NgComponentViewState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +13,14 @@ public class NgComponentPanel extends JPanel {
     private JPanel main;
     private NgComponentEditorHolder editors;
 
-    public NgComponentPanel(NgComponentEditorHolder editors) {
+    private NgComponentViewState.NgEditorOpenFileState fileState;
+
+    public NgComponentPanel(NgComponentEditorHolder editors,
+                            NgComponentViewState.NgEditorOpenFileState fileState) {
         this.editors = editors;
         this.main = new JPanel();
+
+        this.fileState = fileState;
 
         init();
     }
@@ -62,15 +68,21 @@ public class NgComponentPanel extends JPanel {
 
         JCheckBox box = new JCheckBox(name);
         box.setActionCommand(name);
-        box.setSelected(true);
+        box.setSelected(this.fileState.get(name));
 
         box.addActionListener(e -> {
             JCheckBox box1 = (JCheckBox) e.getSource();
             editor.active = box1.isSelected();
+            updateState(name, editor.active);
+
             recalculateContent();
         });
 
         return box;
+    }
+
+    private void updateState(String name, boolean newState) {
+        this.fileState.set(name, newState);
     }
 
     private void recalculateContent() {

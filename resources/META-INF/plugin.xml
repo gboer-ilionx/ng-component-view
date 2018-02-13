@@ -18,8 +18,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <fileEditorProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewFileEditorProvider" order="FIRST"/>
+        <fileEditorProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewFileEditorProvider"/>
         <editorTabTitleProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewTitleProvider"/>
+        <projectService serviceInterface="com.gerhardboer.fileditor.state.NgComponentViewState"
+                        serviceImplementation="com.gerhardboer.fileditor.state.NgComponentViewState"/>
     </extensions>
 
 
