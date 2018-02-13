@@ -1,12 +1,18 @@
 <idea-plugin>
     <id>nl.gerhardboer</id>
     <name>Ng Component View</name>
-    <version>1.0</version>
+    <version>1.1.0</version>
 
     <description><![CDATA[
-      Show the TypeScript class and Template in 1 TabView for the Real Component Feel
+      Show the Angular component parts (ts, html & css) in 1 view for the Real Component Feel
     ]]></description>
 
+    <change-notes><![CDATA[
+<ul>
+    <li>Persistent state of checkboxes in workspace</li>
+</ul>
+    ]]>
+    </change-notes>
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="173.0"/>
 
