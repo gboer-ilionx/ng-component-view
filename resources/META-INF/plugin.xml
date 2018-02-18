@@ -31,8 +31,11 @@
         <!-- save view state -->
         <projectService serviceInterface="com.gerhardboer.fileditor.state.NgComponentViewState"
                         serviceImplementation="com.gerhardboer.fileditor.state.NgComponentViewState"/>
-        
+
+        <!-- show the angular icon on .component-view files -->
         <iconProvider implementation="com.gerhardboer.fileditor.icon.NgComponentIconProvider"/>
+
+        <treeStructureProvider implementation="com.gerhardboer.fileditor.providers.treestructure.NgComponentViewTreeStructureProvider"/>
     </extensions>
 
 
