@@ -9,6 +9,7 @@
 
     <change-notes><![CDATA[
 <ul>
+    <li>Custom .component-view file to open NgComponentView</li>
     <li>Persistent state of checkboxes in workspace</li>
 </ul>
     ]]>
@@ -25,9 +26,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <fileEditorProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewFileEditorProvider"/>
-        <editorTabTitleProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewTitleProvider"/>
+
+        <!-- save view state -->
         <projectService serviceInterface="com.gerhardboer.fileditor.state.NgComponentViewState"
                         serviceImplementation="com.gerhardboer.fileditor.state.NgComponentViewState"/>
+        
+        <iconProvider implementation="com.gerhardboer.fileditor.icon.NgComponentIconProvider"/>
     </extensions>
 
 
