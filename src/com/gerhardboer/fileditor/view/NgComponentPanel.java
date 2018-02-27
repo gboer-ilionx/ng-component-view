@@ -53,21 +53,21 @@ public class NgComponentPanel extends JPanel {
     }
 
     private void addOptions() {
-        JPanel options = new JPanel(new FlowLayout());
-
+        JPanel options = new JPanel();
+        options.setLayout(new FlowLayout());
         for (NgComponentEditor editor : this.editors.all) {
             JCheckBox box = createHideShow(editor);
             options.add(box);
         }
 
-        this.add(options, BorderLayout.NORTH);
+        this.add(options, BorderLayout.SOUTH);
     }
 
     private JCheckBox createHideShow(NgComponentEditor editor) {
-        String fileName = editor.name;
-        String checkboxName = fileName.substring(editor.name.lastIndexOf(".") + 1);
 
-        JCheckBox box = new JCheckBox(checkboxName);
+        JCheckBox box = new JCheckBox(editor.type);
+
+        String fileName = editor.fileName;
         box.setActionCommand(fileName);
         box.setSelected(this.fileState.get(fileName));
 
