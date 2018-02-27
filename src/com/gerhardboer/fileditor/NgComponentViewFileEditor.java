@@ -10,6 +10,7 @@ import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.testFramework.LightVirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,9 +23,11 @@ public class NgComponentViewFileEditor implements FileEditor {
 
     private VirtualFile componentDirectory;
 
+
+
     public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
         NgComponentViewState state = NgComponentViewState.getInstance(project);
-        this.componentDirectory = virtualFile.getParent();
+        this.componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
 
         NgComponentViewState.NgEditorOpenFileState fileState =
                 state.getFileState(componentDirectory.getName());
@@ -70,7 +73,7 @@ public class NgComponentViewFileEditor implements FileEditor {
 
     @Override
     public boolean isValid() {
-        return false;
+        return true;
     }
 
     @Override

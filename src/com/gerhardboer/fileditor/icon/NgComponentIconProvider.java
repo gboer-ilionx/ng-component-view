@@ -1,5 +1,6 @@
 package com.gerhardboer.fileditor.icon;
 
+import com.gerhardboer.fileditor.Constants;
 import com.intellij.ide.IconProvider;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.psi.PsiElement;
@@ -14,8 +15,8 @@ public class NgComponentIconProvider extends IconProvider {
     @Override
     public Icon getIcon(@NotNull PsiElement psiElement, int i) {
         PsiFile containingFile = psiElement.getContainingFile();
-        if(containingFile != null) {
-            boolean isNgComponentView = containingFile.getVirtualFile().getExtension().equals("component-view");
+        if (containingFile != null) {
+            boolean isNgComponentView = containingFile.getVirtualFile().getExtension().equals(Constants.EXTENSION);
             if (isNgComponentView) {
                 return IconLoader.getIcon("/assets/ng-component-view.png");
             }

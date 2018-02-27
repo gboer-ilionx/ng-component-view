@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.gerhardboer.fileditor.Constants.COMPONENT_DELIMITER;
+import static com.gerhardboer.fileditor.Constants.SPEC_DELIMITER;
+
 public class NgComponentEditorHolder {
 
     private Project project;
@@ -67,8 +70,8 @@ public class NgComponentEditorHolder {
 
     private VirtualFile getComponentFiles(List<VirtualFile> files, String extension) {
         List<VirtualFile> file = files.stream()
-                .filter((VirtualFile f) -> f.getName().contains(".component."))
-                .filter((VirtualFile f) -> !f.getName().contains(".spec."))
+                .filter((VirtualFile f) -> f.getName().contains(COMPONENT_DELIMITER))
+                .filter((VirtualFile f) -> !f.getName().contains(SPEC_DELIMITER))
                 .filter((VirtualFile f) -> f.getName().endsWith(extension))
                 .collect(Collectors.toList());
 

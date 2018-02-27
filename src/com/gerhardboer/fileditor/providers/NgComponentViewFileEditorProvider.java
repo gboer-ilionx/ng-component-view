@@ -1,21 +1,22 @@
 package com.gerhardboer.fileditor.providers;
 
+import com.gerhardboer.fileditor.Constants;
+import com.gerhardboer.fileditor.NgComponentViewFileEditor;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
 import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.gerhardboer.fileditor.NgComponentViewFileEditor;
 import org.jetbrains.annotations.NotNull;
+
+import static com.gerhardboer.fileditor.Constants.COMPONENT_VIEW_EDITOR_TYPE_ID;
 
 public class NgComponentViewFileEditorProvider implements FileEditorProvider {
 
 
-    public static final String COMPONENT_VIEW_EDITOR_TYPE_ID = "ng-component-view";
-
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return virtualFile.getName().endsWith(".component-view");
+        return virtualFile.getName().endsWith(Constants.EXTENSION);
     }
 
     @NotNull
