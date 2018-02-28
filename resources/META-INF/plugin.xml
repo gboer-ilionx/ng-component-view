@@ -9,6 +9,10 @@
 
     <change-notes><![CDATA[
 <ul>
+    <li>Fixed bug where component view is opened in wrong window</li>
+    <li>Added less/scss extension support</li>
+    <li>Changed checkbox names for selecting views</li>
+    <li>Non existent .ng-view to open the Angular Component View</li>
     <li>Custom .component-view file to open NgComponentView</li>
     <li>Persistent state of checkboxes in workspace</li>
 </ul>

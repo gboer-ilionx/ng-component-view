@@ -45,9 +45,9 @@ public class NgComponentViewState implements PersistentStateComponent<NgComponen
     }
 
     public class NgEditorOpenFileState {
-        public boolean ts = true;
-        public boolean html = true;
-        public boolean css = true;
+        private boolean ts = true;
+        private boolean html = true;
+        private boolean css = true;
 
         public void set(final String name, boolean newState) {
             if (name.endsWith(".ts"))
