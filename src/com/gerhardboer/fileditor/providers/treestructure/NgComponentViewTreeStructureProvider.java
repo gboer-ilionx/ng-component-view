@@ -28,7 +28,7 @@ public class NgComponentViewTreeStructureProvider implements TreeStructureProvid
     Project project = parent.getProject();
 
     Set<String> parsedComponents = new HashSet<>();
-    ArrayList<AbstractTreeNode> nodes = new ArrayList<AbstractTreeNode>();
+    ArrayList<AbstractTreeNode> nodes = new ArrayList<>();
 
     for (AbstractTreeNode child : children) {
       if (child instanceof PsiFileNode) {
@@ -62,8 +62,12 @@ public class NgComponentViewTreeStructureProvider implements TreeStructureProvid
   }
 
   private PsiFileNode createNgViewPsiNode(Project project, VirtualFile file, ViewSettings settings) {
+    String fileName = file.getName();
+    int index = fileName.indexOf(".");
+    String shortName = index > -1 ? fileName.substring(0, index) : fileName;
+
     PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(
-        "." + Constants.EXTENSION,
+        shortName + "." + Constants.EXTENSION,
         Language.findLanguageByID("TEXT"),
         "", true, true, false, file
     );
