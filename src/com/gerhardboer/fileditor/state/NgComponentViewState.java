@@ -48,9 +48,10 @@ public class NgComponentViewState implements PersistentStateComponent<NgComponen
         private boolean ts = true;
         private boolean html = true;
         private boolean css = true;
+        private boolean spec = true;
 
         public void set(final String name, boolean newState) {
-            if (name.endsWith(".ts"))
+            if (isComponent(name))
                 this.ts = newState;
 
             if (name.endsWith(".html"))
@@ -58,10 +59,14 @@ public class NgComponentViewState implements PersistentStateComponent<NgComponen
 
             if (name.endsWith(".css"))
                 this.css = newState;
+
+            if (isSpec(name)) {
+                this.spec = newState;
+            }
         }
 
         public boolean get(final String name) {
-            if (name.endsWith(".ts")) {
+            if (isComponent(name)) {
                 return this.ts;
             }
 
@@ -73,10 +78,20 @@ public class NgComponentViewState implements PersistentStateComponent<NgComponen
                 return this.css;
             }
 
+            if (isSpec(name)) {
+                return this.spec;
+            }
+
             return true;
         }
 
+        private boolean isComponent(String name) {
+            return name.endsWith(".ts") && !isSpec(name);
+        }
 
+        private boolean isSpec(String name) {
+            return name.endsWith(".spec.ts");
+        }
     }
 }
 

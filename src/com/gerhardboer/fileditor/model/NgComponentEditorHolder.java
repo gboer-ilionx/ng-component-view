@@ -13,7 +13,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static com.gerhardboer.fileditor.Constants.COMPONENT_DELIMITER;
-import static com.gerhardboer.fileditor.Constants.SPEC_DELIMITER;
 
 public class NgComponentEditorHolder {
 
@@ -23,6 +22,7 @@ public class NgComponentEditorHolder {
   private NgComponentEditor component;
   private NgComponentEditor template;
   private NgComponentEditor styling;
+  private NgComponentEditor spec;
 
   private NgComponentViewState.NgEditorOpenFileState state;
 
@@ -49,19 +49,20 @@ public class NgComponentEditorHolder {
   }
 
   private void initNgComponents(List<VirtualFile> files) {
-    VirtualFile component = getComponentFiles(files, ".ts");
-    VirtualFile template = getComponentFiles(files, ".html");
-    VirtualFile styling = getComponentFiles(files, ".css", ".scss", ".less");
-
+    VirtualFile component = getComponentFiles(files, hasExtension(".ts").and(hasExtension(".spec.ts").negate()));
+    VirtualFile template = getComponentFiles(files, hasExtension(".html"));
+    VirtualFile styling = getComponentFiles(files, hasExtension(".css", ".scss", ".less"));
+    VirtualFile spec = getComponentFiles(files, hasExtension(".spec.ts"));
 
     this.component = createNgComponentEditor(component, "component");
     this.template = createNgComponentEditor(template, "template");
     this.styling = createNgComponentEditor(styling, "style");
+    this.spec = createNgComponentEditor(spec, "spec");
   }
 
   private void initComponentList() {
     NgComponentEditor[] components = new NgComponentEditor[]{
-        this.component, this.template, this.styling
+        this.component, this.template, this.styling, this.spec
     };
 
     this.all = Arrays.stream(components)
@@ -69,11 +70,10 @@ public class NgComponentEditorHolder {
         .collect(Collectors.toList());
   }
 
-  private VirtualFile getComponentFiles(List<VirtualFile> files, String... extensions) {
+  private VirtualFile getComponentFiles(List<VirtualFile> files, Predicate<VirtualFile> predicate) {
     List<VirtualFile> file = files.stream()
         .filter((VirtualFile f) -> f.getName().contains(COMPONENT_DELIMITER))
-        .filter((VirtualFile f) -> !f.getName().contains(SPEC_DELIMITER))
-        .filter(anyExtension(extensions))
+        .filter(predicate)
                 .collect(Collectors.toList());
 
     return file.size() == 1
@@ -81,7 +81,7 @@ public class NgComponentEditorHolder {
         : null;
   }
 
-  private Predicate<VirtualFile> anyExtension(String[] extensions) {
+  private Predicate<VirtualFile> hasExtension(String... extensions) {
     return (VirtualFile f) -> Arrays.stream(extensions)
         .anyMatch(
             (extension -> f.getName().endsWith(extension))
