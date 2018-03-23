@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 
 public class NgComponentViewFileEditor implements FileEditor {
 
@@ -29,8 +30,7 @@ public class NgComponentViewFileEditor implements FileEditor {
         NgComponentViewState state = NgComponentViewState.getInstance(project);
         this.componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
 
-        NgComponentViewState.NgEditorOpenFileState fileState =
-                state.getFileState(componentDirectory.getName());
+        Map<FileType, Boolean> fileState = state.getFileState(componentDirectory.getName());
 
         NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
                 project, componentDirectory, fileState
@@ -39,7 +39,7 @@ public class NgComponentViewFileEditor implements FileEditor {
         initView(editorHolder, fileState);
     }
 
-    private void initView(NgComponentEditorHolder editorHolder, NgComponentViewState.NgEditorOpenFileState fileState) {
+    private void initView(NgComponentEditorHolder editorHolder, Map<FileType, Boolean> fileState) {
         this.editorPanel = new NgComponentPanel(editorHolder, fileState);
     }
 
