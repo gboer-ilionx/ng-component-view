@@ -9,9 +9,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import javax.swing.*;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.gerhardboer.fileditor.Constants.COMPONENT_DELIMITER;
+import static java.util.stream.Collectors.toList;
 
 public class NgComponentEditorHolder {
 
@@ -23,25 +23,29 @@ public class NgComponentEditorHolder {
 
   public NgComponentEditorHolder(Project project,
                                  VirtualFile componentDirectory,
+                                 String shortName,
                                  NgComponentFileState state) {
     this.project = project;
     this.state = state;
+    this.init(componentDirectory, shortName);
 
-
-    this.init(componentDirectory);
   }
 
   public List<NgComponentEditor> activeWindows() {
     return this.all.stream()
         .filter(NgComponentEditor::isActive)
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
-  private void init(VirtualFile componentDirectory) {
-    List<VirtualFile> files = Arrays.asList(componentDirectory.getChildren());
-
-    initNgComponents(files);
+  private void init(VirtualFile componentDirectory, String shortName) {
+    initNgComponents(getFiles(componentDirectory, shortName));
     initComponentList();
+  }
+
+  private List<VirtualFile> getFiles(VirtualFile componentDirectory, String shortName) {
+    return Arrays.stream(componentDirectory.getChildren())
+            .filter(virtualFile -> virtualFile.getName().startsWith(shortName))
+            .collect(toList());
   }
 
   private void initNgComponents(List<VirtualFile> files) {
@@ -54,14 +58,14 @@ public class NgComponentEditorHolder {
   private void initComponentList() {
     this.all = this.editors.values().stream()
         .filter(Objects::nonNull)
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   private VirtualFile getComponentFiles(List<VirtualFile> files, Predicate<VirtualFile> predicate) {
     List<VirtualFile> file = files.stream()
         .filter((VirtualFile f) -> f.getName().contains(COMPONENT_DELIMITER))
-        .filter(predicate)
-        .collect(Collectors.toList());
+            .filter(predicate)
+            .collect(toList());
 
     return file.size() == 1
         ? file.get(0)

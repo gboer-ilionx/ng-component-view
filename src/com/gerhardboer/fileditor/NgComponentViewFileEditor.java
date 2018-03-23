@@ -18,25 +18,27 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
+import static com.gerhardboer.fileditor.ShortName.shortName;
+
 public class NgComponentViewFileEditor implements FileEditor {
 
-  private JComponent editorPanel;
+    private JComponent editorPanel;
+    private String shortName;
 
-  private VirtualFile componentDirectory;
+    public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
 
+        NgComponentViewState state = NgComponentViewState.getInstance(project);
+        VirtualFile componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
+        this.shortName = shortName(virtualFile);
 
-  public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
-    NgComponentViewState state = NgComponentViewState.getInstance(project);
-    this.componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
+        NgComponentFileState fileState = state.getFileState(componentDirectory.getName());
 
-    NgComponentFileState fileState = state.getFileState(componentDirectory.getName());
+        NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
+                project, componentDirectory, shortName, fileState
+        );
 
-    NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
-        project, componentDirectory, fileState
-    );
-
-    initView(editorHolder, fileState);
-  }
+        initView(editorHolder, fileState);
+    }
 
   private void initView(NgComponentEditorHolder editorHolder, NgComponentFileState fileState) {
     this.editorPanel = new NgComponentPanel(editorHolder, fileState);
@@ -57,7 +59,7 @@ public class NgComponentViewFileEditor implements FileEditor {
   @NotNull
   @Override
   public String getName() {
-    return componentDirectory.getName();
+    return this.shortName;
   }
 
   @Override
