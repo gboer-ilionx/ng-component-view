@@ -19,6 +19,7 @@
  */
 package com.gerhardboer.fileditor.settings;
 
+import com.gerhardboer.fileditor.FileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.*;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -26,13 +27,13 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 @State(
-  name = "NgComponentGlobalSettings",
-  storages = {
-      @Storage(
-          id = "ng-component-view",
-          value = "ng-component-view.xml"
-      )
-  }
+    name = "NgComponentGlobalSettings",
+    storages = {
+        @Storage(
+            id = "ng-component-view",
+            value = "ng-component-view.xml"
+        )
+    }
 )
 public final class NgComponentGlobalSettings implements ApplicationComponent, PersistentStateComponent<NgComponentGlobalSettings> {
 
@@ -44,6 +45,21 @@ public final class NgComponentGlobalSettings implements ApplicationComponent, Pe
 
   public static NgComponentGlobalSettings getInstance() {
     return ApplicationManager.getApplication().getComponent(NgComponentGlobalSettings.class);
+  }
+
+  public boolean getByType(FileType type) {
+    switch (type) {
+      case TEMPLATE:
+        return this.templateView;
+      case COMPONENT:
+        return this.componentView;
+      case STYLE:
+        return this.stylesView;
+      case SPEC:
+        return this.specView;
+      default:
+        return true;
+    }
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.gerhardboer.fileditor.model;
 
 import com.gerhardboer.fileditor.FileType;
+import com.gerhardboer.fileditor.state.NgComponentFileState;
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -18,11 +19,11 @@ public class NgComponentEditorHolder {
   public List<NgComponentEditor> all;
 
   private Map<FileType, NgComponentEditor> editors = new TreeMap<>();
-  private Map<FileType, Boolean> state;
+  private NgComponentFileState state;
 
   public NgComponentEditorHolder(Project project,
                                  VirtualFile componentDirectory,
-                                 Map<FileType, Boolean> state) {
+                                 NgComponentFileState state) {
     this.project = project;
     this.state = state;
 
@@ -48,7 +49,7 @@ public class NgComponentEditorHolder {
       VirtualFile virtualFile = getComponentFiles(files, fileType::appliesToVirtualFile);
       this.editors.put(fileType, createNgComponentEditor(virtualFile, fileType.getDisplayName()));
     });
-    }
+  }
 
   private void initComponentList() {
     this.all = this.editors.values().stream()
@@ -60,7 +61,7 @@ public class NgComponentEditorHolder {
     List<VirtualFile> file = files.stream()
         .filter((VirtualFile f) -> f.getName().contains(COMPONENT_DELIMITER))
         .filter(predicate)
-                .collect(Collectors.toList());
+        .collect(Collectors.toList());
 
     return file.size() == 1
         ? file.get(0)
@@ -74,7 +75,7 @@ public class NgComponentEditorHolder {
   }
 
   private NgComponentEditor createComponentEditorWithState(VirtualFile f, String type) {
-    boolean isActive = this.state.getOrDefault(f.getName(), true);
+    boolean isActive = this.state.get(f.getName());
 
     return new NgComponentEditor(createEditor(f), f.getName(), isActive, type);
   }

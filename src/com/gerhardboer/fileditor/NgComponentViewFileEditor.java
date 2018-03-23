@@ -1,8 +1,8 @@
 package com.gerhardboer.fileditor;
 
 import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
+import com.gerhardboer.fileditor.state.NgComponentFileState;
 import com.gerhardboer.fileditor.state.NgComponentViewState;
-import com.gerhardboer.fileditor.state.NgEditorOpenFileState;
 import com.gerhardboer.fileditor.view.NgComponentPanel;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.openapi.fileEditor.FileEditor;
@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
-import java.util.Map;
 
 public class NgComponentViewFileEditor implements FileEditor {
 
@@ -30,7 +29,7 @@ public class NgComponentViewFileEditor implements FileEditor {
     NgComponentViewState state = NgComponentViewState.getInstance(project);
     this.componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
 
-    Map<FileType, Boolean> fileState = state.getFileState(componentDirectory.getName());
+    NgComponentFileState fileState = state.getFileState(componentDirectory.getName());
 
     NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
         project, componentDirectory, fileState
@@ -39,7 +38,7 @@ public class NgComponentViewFileEditor implements FileEditor {
     initView(editorHolder, fileState);
   }
 
-  private void initView(NgComponentEditorHolder editorHolder, Map<FileType, Boolean> fileState) {
+  private void initView(NgComponentEditorHolder editorHolder, NgComponentFileState fileState) {
     this.editorPanel = new NgComponentPanel(editorHolder, fileState);
   }
 

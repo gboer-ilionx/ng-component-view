@@ -1,7 +1,9 @@
 package com.gerhardboer.fileditor.state;
 
-import com.gerhardboer.fileditor.FileType;
-import com.intellij.openapi.components.*;
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
+import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +22,7 @@ import java.util.Map;
 )
 public class NgComponentViewState implements PersistentStateComponent<NgComponentViewState> {
 
-  private Map<String, Map<FileType, Boolean>> fileStates = new HashMap<>();
+  private Map<String, NgComponentFileState> fileStates = new HashMap<>();
 
   @Nullable
   @Override
@@ -38,14 +40,16 @@ public class NgComponentViewState implements PersistentStateComponent<NgComponen
     return ServiceManager.getService(project, NgComponentViewState.class);
   }
 
-  public Map<FileType, Boolean> getFileState(String fileName) {
-    Map<FileType, Boolean> currentState = this.fileStates.get(fileName);
-    if (currentState == null) {
-      currentState = new HashMap<>();
-      this.fileStates.put(fileName, currentState);
+  public NgComponentFileState getFileState(String componentName) {
+
+    NgComponentFileState recordedState = this.fileStates.get(componentName);
+    if (recordedState == null) {
+      recordedState = new NgComponentFileState();
+      this.fileStates.put(componentName, recordedState);
     }
 
-    return currentState;
+    return recordedState;
   }
+
 }
 
