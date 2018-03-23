@@ -1,5 +1,6 @@
 package com.gerhardboer.fileditor.state;
 
+import com.gerhardboer.fileditor.FileType;
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -19,7 +20,7 @@ import java.util.Map;
 )
 public class NgComponentViewState implements PersistentStateComponent<NgComponentViewState> {
 
-  private Map<String, NgEditorOpenFileState> fileStates = new HashMap<>();
+    private Map<String, Map<FileType, Boolean>> fileStates = new HashMap<>();
 
   @Nullable
   @Override
@@ -37,14 +38,14 @@ public class NgComponentViewState implements PersistentStateComponent<NgComponen
     return ServiceManager.getService(project, NgComponentViewState.class);
   }
 
-  public NgEditorOpenFileState getFileState(String fileName) {
-    NgEditorOpenFileState currentState = this.fileStates.get(fileName);
-    if (currentState == null) {
-      currentState = new NgEditorOpenFileState();
-      this.fileStates.put(fileName, currentState);
-    }
+    public Map<FileType, Boolean> getFileState(String fileName) {
+        Map<FileType, Boolean> currentState = this.fileStates.get(fileName);
+        if (currentState == null) {
+            currentState = new HashMap<>();
+            this.fileStates.put(fileName, currentState);
+        }
 
-    return currentState;
-  }
+        return currentState;
+    }
 }
 
