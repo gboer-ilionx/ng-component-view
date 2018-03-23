@@ -20,7 +20,7 @@ import java.util.Map;
 )
 public class NgComponentViewState implements PersistentStateComponent<NgComponentViewState> {
 
-    private Map<String, Map<FileType, Boolean>> fileStates = new HashMap<>();
+  private Map<String, Map<FileType, Boolean>> fileStates = new HashMap<>();
 
   @Nullable
   @Override
@@ -38,14 +38,14 @@ public class NgComponentViewState implements PersistentStateComponent<NgComponen
     return ServiceManager.getService(project, NgComponentViewState.class);
   }
 
-    public Map<FileType, Boolean> getFileState(String fileName) {
-        Map<FileType, Boolean> currentState = this.fileStates.get(fileName);
-        if (currentState == null) {
-            currentState = new HashMap<>();
-            this.fileStates.put(fileName, currentState);
-        }
-
-        return currentState;
+  public Map<FileType, Boolean> getFileState(String fileName) {
+    Map<FileType, Boolean> currentState = this.fileStates.get(fileName);
+    if (currentState == null) {
+      currentState = new HashMap<>();
+      this.fileStates.put(fileName, currentState);
     }
+
+    return currentState;
+  }
 }
 

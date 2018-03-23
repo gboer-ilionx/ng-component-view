@@ -40,33 +40,42 @@ public class NgComponentGlobalConfigurable implements Configurable, Configurable
     this.globalSettings = app.getComponent(NgComponentGlobalSettings.class);
   }
 
-  @Nls @Override public String getDisplayName() {
+  @Nls
+  @Override
+  public String getDisplayName() {
     return "NgComponentView";
   }
 
   @Nullable
-  @Override public String getHelpTopic() {
+  @Override
+  public String getHelpTopic() {
     return null;
   }
 
-  @Nullable @Override public JComponent createComponent() {
+  @Nullable
+  @Override
+  public JComponent createComponent() {
     return getPanel();
   }
 
-  @Override public boolean isModified() {
+  @Override
+  public boolean isModified() {
     return globalPanel.isModified(globalSettings);
   }
 
-  @Override public void apply() {
+  @Override
+  public void apply() {
     globalPanel.save(globalSettings);
   }
 
 
-  @Override public void reset() {
+  @Override
+  public void reset() {
     globalPanel.load(globalSettings);
   }
 
-  @Override public void disposeUIResources() {
+  @Override
+  public void disposeUIResources() {
     if (rootPanel != null) {
       rootPanel.setVisible(false);
       rootPanel = null;

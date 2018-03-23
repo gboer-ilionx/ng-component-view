@@ -39,9 +39,9 @@ public class NgComponentViewFileEditor implements FileEditor {
     initView(editorHolder, fileState);
   }
 
-    private void initView(NgComponentEditorHolder editorHolder, Map<FileType, Boolean> fileState) {
-        this.editorPanel = new NgComponentPanel(editorHolder, fileState);
-    }
+  private void initView(NgComponentEditorHolder editorHolder, Map<FileType, Boolean> fileState) {
+    this.editorPanel = new NgComponentPanel(editorHolder, fileState);
+  }
 
   @NotNull
   @Override

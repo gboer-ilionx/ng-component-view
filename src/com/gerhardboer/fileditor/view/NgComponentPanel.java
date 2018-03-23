@@ -11,85 +11,85 @@ import java.util.Map;
 
 public class NgComponentPanel extends JPanel {
 
-    private JPanel main;
-    private NgComponentEditorHolder editors;
+  private JPanel main;
+  private NgComponentEditorHolder editors;
 
-    private Map<FileType, Boolean> fileState;
+  private Map<FileType, Boolean> fileState;
 
-    public NgComponentPanel(NgComponentEditorHolder editors,
-                            Map<FileType, Boolean> fileState) {
-        this.editors = editors;
-        this.main = new JPanel();
-        this.fileState = fileState;
+  public NgComponentPanel(NgComponentEditorHolder editors,
+                          Map<FileType, Boolean> fileState) {
+    this.editors = editors;
+    this.main = new JPanel();
+    this.fileState = fileState;
 
-        init();
+    init();
+  }
+
+  private void init() {
+    setBorderLayout();
+
+    addMain();
+    addOptions();
+  }
+
+  private void setBorderLayout() {
+    this.setLayout(new BorderLayout());
+  }
+
+  private void addMain() {
+    setGrid(main);
+    add(this.main, BorderLayout.CENTER);
+  }
+
+  private void setGrid(JComponent panel) {
+    List<NgComponentEditor> editors = this.editors.activeWindows();
+    panel.setLayout(new GridLayout(1, editors.size()));
+
+    for (NgComponentEditor editor : editors) {
+      panel.add(editor.view);
     }
 
-    private void init() {
-        setBorderLayout();
+    panel.updateUI();
+  }
 
-        addMain();
-        addOptions();
+  private void addOptions() {
+    JPanel options = new JPanel();
+    options.setLayout(new FlowLayout());
+    for (NgComponentEditor editor : this.editors.all) {
+      JCheckBox box = createHideShow(editor);
+      options.add(box);
     }
 
-    private void setBorderLayout() {
-        this.setLayout(new BorderLayout());
-    }
+    this.add(options, BorderLayout.SOUTH);
+  }
 
-    private void addMain() {
-        setGrid(main);
-        add(this.main, BorderLayout.CENTER);
-    }
+  private JCheckBox createHideShow(NgComponentEditor editor) {
 
-    private void setGrid(JComponent panel) {
-        List<NgComponentEditor> editors = this.editors.activeWindows();
-        panel.setLayout(new GridLayout(1, editors.size()));
+    JCheckBox box = new JCheckBox(editor.type);
 
-        for (NgComponentEditor editor : editors) {
-            panel.add(editor.view);
-        }
+    String fileName = editor.fileName;
+    box.setActionCommand(fileName);
+    box.setSelected(this.fileState.getOrDefault(fileName, true));
 
-        panel.updateUI();
-    }
+    box.addActionListener(e -> {
+      JCheckBox box1 = (JCheckBox) e.getSource();
+      editor.active = box1.isSelected();
+      updateState(fileName, editor.active);
 
-    private void addOptions() {
-        JPanel options = new JPanel();
-        options.setLayout(new FlowLayout());
-        for (NgComponentEditor editor : this.editors.all) {
-            JCheckBox box = createHideShow(editor);
-            options.add(box);
-        }
+      recalculateContent();
+    });
 
-        this.add(options, BorderLayout.SOUTH);
-    }
+    return box;
+  }
 
-    private JCheckBox createHideShow(NgComponentEditor editor) {
+  private void updateState(String name, boolean newState) {
+    FileType.forFileName(name).map(fileType ->
+        this.fileState.put(fileType, newState));
+  }
 
-        JCheckBox box = new JCheckBox(editor.type);
-
-        String fileName = editor.fileName;
-        box.setActionCommand(fileName);
-        box.setSelected(this.fileState.getOrDefault(fileName, true));
-
-        box.addActionListener(e -> {
-            JCheckBox box1 = (JCheckBox) e.getSource();
-            editor.active = box1.isSelected();
-            updateState(fileName, editor.active);
-
-            recalculateContent();
-        });
-
-        return box;
-    }
-
-    private void updateState(String name, boolean newState) {
-        FileType.forFileName(name).map(fileType ->
-                this.fileState.put(fileType, newState));
-    }
-
-    private void recalculateContent() {
-        this.main.removeAll();
-        setGrid(this.main);
-    }
+  private void recalculateContent() {
+    this.main.removeAll();
+    setGrid(this.main);
+  }
 
 }
