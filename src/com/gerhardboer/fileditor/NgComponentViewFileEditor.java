@@ -2,6 +2,7 @@ package com.gerhardboer.fileditor;
 
 import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
 import com.gerhardboer.fileditor.state.NgComponentViewState;
+import com.gerhardboer.fileditor.state.NgEditorOpenFileState;
 import com.gerhardboer.fileditor.view.NgComponentPanel;
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
 import com.intellij.openapi.fileEditor.FileEditor;
@@ -19,109 +20,108 @@ import java.beans.PropertyChangeListener;
 
 public class NgComponentViewFileEditor implements FileEditor {
 
-    private JComponent editorPanel;
+  private JComponent editorPanel;
 
-    private VirtualFile componentDirectory;
+  private VirtualFile componentDirectory;
 
 
+  public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
+    NgComponentViewState state = NgComponentViewState.getInstance(project);
+    this.componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
 
-    public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
-        NgComponentViewState state = NgComponentViewState.getInstance(project);
-        this.componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
+    NgEditorOpenFileState fileState =
+        state.getFileState(componentDirectory.getName());
 
-        NgComponentViewState.NgEditorOpenFileState fileState =
-                state.getFileState(componentDirectory.getName());
+    NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
+        project, componentDirectory, fileState
+    );
 
-        NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
-                project, componentDirectory, fileState
-        );
+    initView(editorHolder, fileState);
+  }
 
-        initView(editorHolder, fileState);
-    }
+  private void initView(NgComponentEditorHolder editorHolder, NgEditorOpenFileState fileState) {
+    this.editorPanel = new NgComponentPanel(editorHolder, fileState);
+  }
 
-    private void initView(NgComponentEditorHolder editorHolder, NgComponentViewState.NgEditorOpenFileState fileState) {
-        this.editorPanel = new NgComponentPanel(editorHolder, fileState);
-    }
+  @NotNull
+  @Override
+  public JComponent getComponent() {
+    return editorPanel;
+  }
 
-    @NotNull
-    @Override
-    public JComponent getComponent() {
-        return editorPanel;
-    }
+  @Nullable
+  @Override
+  public JComponent getPreferredFocusedComponent() {
+    return editorPanel;
+  }
 
-    @Nullable
-    @Override
-    public JComponent getPreferredFocusedComponent() {
-        return editorPanel;
-    }
+  @NotNull
+  @Override
+  public String getName() {
+    return componentDirectory.getName();
+  }
 
-    @NotNull
-    @Override
-    public String getName() {
-        return componentDirectory.getName();
-    }
+  @Override
+  public void setState(@NotNull FileEditorState fileEditorState) {
 
-    @Override
-    public void setState(@NotNull FileEditorState fileEditorState) {
+  }
 
-    }
+  @Override
+  public boolean isModified() {
+    return false;
+  }
 
-    @Override
-    public boolean isModified() {
-        return false;
-    }
+  @Override
+  public boolean isValid() {
+    return true;
+  }
 
-    @Override
-    public boolean isValid() {
-        return true;
-    }
+  @Override
+  public void selectNotify() {
 
-    @Override
-    public void selectNotify() {
+  }
 
-    }
+  @Override
+  public void deselectNotify() {
 
-    @Override
-    public void deselectNotify() {
+  }
 
-    }
+  @Override
+  public void addPropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
 
-    @Override
-    public void addPropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
+  }
 
-    }
+  @Override
+  public void removePropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
 
-    @Override
-    public void removePropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
+  }
 
-    }
+  @Nullable
+  @Override
+  public BackgroundEditorHighlighter getBackgroundHighlighter() {
+    return null;
+  }
 
-    @Nullable
-    @Override
-    public BackgroundEditorHighlighter getBackgroundHighlighter() {
-        return null;
-    }
+  @Nullable
+  @Override
+  public FileEditorLocation getCurrentLocation() {
+    return null;
+  }
 
-    @Nullable
-    @Override
-    public FileEditorLocation getCurrentLocation() {
-        return null;
-    }
+  @Override
+  public void dispose() {
 
-    @Override
-    public void dispose() {
+  }
 
-    }
+  @Nullable
+  @Override
+  public <T> T getUserData(@NotNull Key<T> key) {
+    return null;
+  }
 
-    @Nullable
-    @Override
-    public <T> T getUserData(@NotNull Key<T> key) {
-        return null;
-    }
+  @Override
+  public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
 
-    @Override
-    public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
-
-    }
+  }
 
 }

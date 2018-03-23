@@ -3,6 +3,7 @@ package com.gerhardboer.fileditor.view;
 import com.gerhardboer.fileditor.model.NgComponentEditor;
 import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
 import com.gerhardboer.fileditor.state.NgComponentViewState;
+import com.gerhardboer.fileditor.state.NgEditorOpenFileState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,10 +14,10 @@ public class NgComponentPanel extends JPanel {
     private JPanel main;
     private NgComponentEditorHolder editors;
 
-    private NgComponentViewState.NgEditorOpenFileState fileState;
+    private NgEditorOpenFileState fileState;
 
     public NgComponentPanel(NgComponentEditorHolder editors,
-                            NgComponentViewState.NgEditorOpenFileState fileState) {
+                            NgEditorOpenFileState fileState) {
         this.editors = editors;
         this.main = new JPanel();
 

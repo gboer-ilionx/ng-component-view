@@ -1,6 +1,8 @@
 package com.gerhardboer.fileditor.model;
 
-import com.gerhardboer.fileditor.state.NgComponentViewState;
+import com.gerhardboer.fileditor.settings.NgComponentGlobalSettings;
+import com.gerhardboer.fileditor.state.NgEditorOpenFileState;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -24,13 +26,14 @@ public class NgComponentEditorHolder {
   private NgComponentEditor template;
   private NgComponentEditor styling;
 
-  private NgComponentViewState.NgEditorOpenFileState state;
+  private NgEditorOpenFileState state;
 
   public NgComponentEditorHolder(Project project,
                                  VirtualFile componentDirectory,
-                                 NgComponentViewState.NgEditorOpenFileState state) {
+                                 NgEditorOpenFileState state) {
     this.project = project;
     this.state = state;
+
 
     this.init(componentDirectory);
   }

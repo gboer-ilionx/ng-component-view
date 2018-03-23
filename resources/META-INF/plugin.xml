@@ -9,6 +9,7 @@
 
     <change-notes><![CDATA[
 <ul>
+    <li>Added global settings for default view opening</li>
     <li>Fixed bug where component view is opened in wrong window</li>
     <li>Added less/scss extension support</li>
     <li>Changed checkbox names for selecting views</li>
@@ -27,6 +28,12 @@
     -->
     <depends>com.intellij.modules.lang</depends>
 
+    <application-components>
+        <component>
+            <implementation-class>com.gerhardboer.fileditor.settings.NgComponentGlobalSettings</implementation-class>
+        </component>
+    </application-components>
+
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <fileEditorProvider implementation="com.gerhardboer.fileditor.providers.NgComponentViewFileEditorProvider"/>
@@ -40,6 +47,9 @@
         <iconProvider implementation="com.gerhardboer.fileditor.icon.NgComponentIconProvider"/>
 
         <treeStructureProvider implementation="com.gerhardboer.fileditor.providers.treestructure.NgComponentViewTreeStructureProvider"/>
+        <applicationConfigurable id="NgComponentApp" displayName="NgComponent view" groupId="tools"
+                                 instance="com.gerhardboer.fileditor.settings.NgComponentGlobalConfigurable"/>
+
     </extensions>
 
 
