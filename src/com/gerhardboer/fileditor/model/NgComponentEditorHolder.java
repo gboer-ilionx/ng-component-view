@@ -1,14 +1,12 @@
 package com.gerhardboer.fileditor.model;
 
-import com.gerhardboer.fileditor.state.NgComponentViewState;
+import com.gerhardboer.fileditor.FileType;
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import javax.swing.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -19,16 +17,12 @@ public class NgComponentEditorHolder {
   private Project project;
   public List<NgComponentEditor> all;
 
-  private NgComponentEditor component;
-  private NgComponentEditor template;
-  private NgComponentEditor styling;
-  private NgComponentEditor spec;
-
-  private NgComponentViewState.NgEditorOpenFileState state;
+  private Map<FileType, NgComponentEditor> editors = new TreeMap<>();
+  private Map<FileType, Boolean> state;
 
   public NgComponentEditorHolder(Project project,
                                  VirtualFile componentDirectory,
-                                 NgComponentViewState.NgEditorOpenFileState state) {
+                                 Map<FileType, Boolean> state) {
     this.project = project;
     this.state = state;
 
@@ -49,23 +43,14 @@ public class NgComponentEditorHolder {
   }
 
   private void initNgComponents(List<VirtualFile> files) {
-    VirtualFile component = getComponentFiles(files, hasExtension(".ts").and(hasExtension(".spec.ts").negate()));
-    VirtualFile template = getComponentFiles(files, hasExtension(".html"));
-    VirtualFile styling = getComponentFiles(files, hasExtension(".css", ".scss", ".less"));
-    VirtualFile spec = getComponentFiles(files, hasExtension(".spec.ts"));
-
-    this.component = createNgComponentEditor(component, "component");
-    this.template = createNgComponentEditor(template, "template");
-    this.styling = createNgComponentEditor(styling, "style");
-    this.spec = createNgComponentEditor(spec, "spec");
-  }
+    Arrays.stream(FileType.values()).forEach(fileType -> {
+      VirtualFile virtualFile = getComponentFiles(files, fileType::appliesToVirtualFile);
+      this.editors.put(fileType, createNgComponentEditor(virtualFile, fileType.getDisplayName()));
+    });
+    }
 
   private void initComponentList() {
-    NgComponentEditor[] components = new NgComponentEditor[]{
-        this.component, this.template, this.styling, this.spec
-    };
-
-    this.all = Arrays.stream(components)
+    this.all = this.editors.values().stream()
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
   }
@@ -81,13 +66,6 @@ public class NgComponentEditorHolder {
         : null;
   }
 
-  private Predicate<VirtualFile> hasExtension(String... extensions) {
-    return (VirtualFile f) -> Arrays.stream(extensions)
-        .anyMatch(
-            (extension -> f.getName().endsWith(extension))
-        );
-  }
-
   private NgComponentEditor createNgComponentEditor(VirtualFile f, String type) {
     return f != null
         ? createComponentEditorWithState(f, type)
@@ -95,7 +73,7 @@ public class NgComponentEditorHolder {
   }
 
   private NgComponentEditor createComponentEditorWithState(VirtualFile f, String type) {
-    boolean isActive = this.state.get(f.getName());
+    boolean isActive = this.state.getOrDefault(f.getName(), true);
 
     return new NgComponentEditor(createEditor(f), f.getName(), isActive, type);
   }
