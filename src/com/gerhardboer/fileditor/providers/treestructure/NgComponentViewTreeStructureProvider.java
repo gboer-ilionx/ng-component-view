@@ -18,6 +18,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.gerhardboer.fileditor.ShortName.shortName;
+
 public class NgComponentViewTreeStructureProvider implements TreeStructureProvider {
 
   @NotNull
@@ -62,12 +64,9 @@ public class NgComponentViewTreeStructureProvider implements TreeStructureProvid
   }
 
   private PsiFileNode createNgViewPsiNode(Project project, VirtualFile file, ViewSettings settings) {
-    String fileName = file.getName();
-    int index = fileName.indexOf(".");
-    String shortName = index > -1 ? fileName.substring(0, index) : fileName;
 
     PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(
-        shortName + "." + Constants.EXTENSION,
+        shortName(file) + "." + Constants.EXTENSION,
         Language.findLanguageByID("TEXT"),
         "", true, true, false, file
     );

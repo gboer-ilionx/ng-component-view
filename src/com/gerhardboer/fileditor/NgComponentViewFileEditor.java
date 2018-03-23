@@ -18,22 +18,23 @@ import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.util.Map;
 
+import static com.gerhardboer.fileditor.ShortName.shortName;
+
 public class NgComponentViewFileEditor implements FileEditor {
 
     private JComponent editorPanel;
-
-    private VirtualFile componentDirectory;
-
-
+    private String shortName;
 
     public NgComponentViewFileEditor(Project project, VirtualFile virtualFile) {
-        NgComponentViewState state = NgComponentViewState.getInstance(project);
-        this.componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
 
-        Map<FileType, Boolean> fileState = state.getFileState(componentDirectory.getName());
+        NgComponentViewState state = NgComponentViewState.getInstance(project);
+        VirtualFile componentDirectory = ((LightVirtualFile) virtualFile).getOriginalFile().getParent();
+        this.shortName = shortName(virtualFile);
+
+        Map<FileType, Boolean> fileState = state.getFileState(this.shortName);
 
         NgComponentEditorHolder editorHolder = new NgComponentEditorHolder(
-                project, componentDirectory, fileState
+                project, componentDirectory, shortName, fileState
         );
 
         initView(editorHolder, fileState);
@@ -58,7 +59,7 @@ public class NgComponentViewFileEditor implements FileEditor {
     @NotNull
     @Override
     public String getName() {
-        return componentDirectory.getName();
+        return this.shortName;
     }
 
     @Override
