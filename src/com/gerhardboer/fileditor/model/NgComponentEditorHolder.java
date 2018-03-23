@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.gerhardboer.fileditor.Constants.COMPONENT_DELIMITER;
 import static java.util.stream.Collectors.toList;
 
 public class NgComponentEditorHolder {
@@ -61,9 +60,8 @@ public class NgComponentEditorHolder {
 
   private VirtualFile getComponentFiles(List<VirtualFile> files, Predicate<VirtualFile> predicate) {
     List<VirtualFile> file = files.stream()
-        .filter((VirtualFile f) -> f.getName().contains(COMPONENT_DELIMITER))
-        .filter(predicate)
-                .collect(toList());
+            .filter(predicate)
+            .collect(toList());
 
     return file.size() == 1
         ? file.get(0)
