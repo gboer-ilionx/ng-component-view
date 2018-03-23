@@ -3,9 +3,15 @@ package com.gerhardboer.fileditor.view;
 import com.gerhardboer.fileditor.model.NgComponentEditor;
 import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
 import com.gerhardboer.fileditor.state.NgComponentViewState;
+import org.jdesktop.swingx.JXMultiSplitPane;
+import org.jdesktop.swingx.MultiSplitLayout.Split;
+import org.jdesktop.swingx.MultiSplitLayout.Node;
+import org.jdesktop.swingx.MultiSplitLayout.Divider;
+import org.jdesktop.swingx.MultiSplitLayout.Leaf;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.util.List;
 
 public class NgComponentPanel extends JPanel {
@@ -37,16 +43,19 @@ public class NgComponentPanel extends JPanel {
     }
 
     private void addMain() {
-        setGrid(main);
+        setView(main);
         add(this.main, BorderLayout.CENTER);
     }
 
-    private void setGrid(JComponent panel) {
+    private void setView(JComponent panel) {
         List<NgComponentEditor> editors = this.editors.activeWindows();
-        panel.setLayout(new GridLayout(1, editors.size()));
+        panel.setLayout(new BorderLayout());
 
-        for (NgComponentEditor editor : editors) {
-            panel.add(editor.view);
+        // When there is just one editor we don't need MultiSplit
+        if (editors.size() == 1) {
+            panel.add(handleOneSizeList(editors));
+        } else {
+            panel.add(handleMultipleSizeList(editors));
         }
 
         panel.updateUI();
@@ -88,7 +97,40 @@ public class NgComponentPanel extends JPanel {
 
     private void recalculateContent() {
         this.main.removeAll();
-        setGrid(this.main);
+        setView(this.main);
     }
 
+    private JComponent handleOneSizeList(List<NgComponentEditor> editors) {
+        return editors.get(0).view;
+    }
+
+    // Source for the idea of multisplitpane
+    // https://stackoverflow.com/questions/6117826/jxmultisplitpane-how-to-use
+    // NOTE setWeight does not work
+
+    private JXMultiSplitPane handleMultipleSizeList(List<NgComponentEditor> editors) {
+        JXMultiSplitPane sp = new JXMultiSplitPane();
+
+        Split split = new Split();
+        sp.setModel(split);
+        // Keep track of the leafs in a List, to set later on on the split
+        List<Node> nodeList = new ArrayList<>();
+        // This calculates the width (weight) of the leaf. 100 / 4 / 100 = 0.25 (25%)
+        double preferredSize = (double) 100 / editors.size() / 100;
+
+        for (int i = 0; i < editors.size(); i++) {
+            sp.add(editors.get(i).view, editors.get(i).fileName);
+            Leaf leaf = new Leaf(editors.get(i).fileName);
+            // Set the weight for the leaf
+            leaf.setWeight(preferredSize);
+            nodeList.add(leaf);
+            // After the last leaf is added, a divider is no longer needed
+            if (i != (editors.size() - 1)) {
+                nodeList.add(new Divider());
+            }
+        }
+
+        split.setChildren(nodeList);
+        return sp;
+    }
 }
