@@ -1,6 +1,7 @@
 package com.gerhardboer.fileditor.providers.treestructure;
 
 import com.gerhardboer.fileditor.Constants;
+import com.gerhardboer.fileditor.ShortName;
 import com.intellij.ide.projectView.TreeStructureProvider;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
@@ -13,12 +14,12 @@ import com.intellij.psi.PsiFileFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Objects;
 
-import static com.gerhardboer.fileditor.ShortName.shortName;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 public class NgComponentViewTreeStructureProvider implements TreeStructureProvider {
 
@@ -27,48 +28,28 @@ public class NgComponentViewTreeStructureProvider implements TreeStructureProvid
   public Collection<AbstractTreeNode> modify(@NotNull AbstractTreeNode parent,
                                              @NotNull Collection<AbstractTreeNode> children,
                                              ViewSettings settings) {
-    Project project = parent.getProject();
 
-    Set<String> parsedComponents = new HashSet<>();
-    ArrayList<AbstractTreeNode> nodes = new ArrayList<>();
+    return concat(
+            children.stream(),
+            children.stream()
+                    .filter(node -> node instanceof PsiFileNode)
+                    .map(node -> ((PsiFileNode) node).getVirtualFile())
+                    .filter(Objects::nonNull)
+                    .collect(groupingBy(ShortName::shortName))
+                    .entrySet()
+                    .stream()
+                    .filter(entry -> entry.getValue().size() > 1)
+                    .map(entry -> createNgViewPsiNode(parent.getProject(), entry.getKey(), entry.getValue().get(0), settings)))
+            .collect(toList());
 
-    for (AbstractTreeNode child : children) {
-      if (child instanceof PsiFileNode) {
-        VirtualFile file = ((PsiFileNode) child).getVirtualFile();
-        if (file != null) {
-          addAsNgView(project, settings, file, nodes, parsedComponents);
-        }
-
-      }
-
-      nodes.add(child);
-    }
-    return nodes;
   }
 
-  private void addAsNgView(Project project, ViewSettings settings, VirtualFile file,
-                           ArrayList<AbstractTreeNode> nodes, Set<String> parsedComponents) {
-
-    String fileName = file.getName();
-    boolean isComponentDirectory = fileName.contains(Constants.COMPONENT_DELIMITER);
-
-    if (isComponentDirectory) {
-      PsiFileNode node = createNgViewPsiNode(project, file, settings);
-
-      String parsedComponent = fileName.split("\\.")[0];
-      if (!parsedComponents.contains(parsedComponent)) {
-        parsedComponents.add(parsedComponent);
-        nodes.add(node);
-      }
-    }
-  }
-
-  private PsiFileNode createNgViewPsiNode(Project project, VirtualFile file, ViewSettings settings) {
+  private PsiFileNode createNgViewPsiNode(Project project, String shortName, VirtualFile originalFile, ViewSettings settings) {
 
     PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(
-        shortName(file) + "." + Constants.EXTENSION,
+        shortName + "." + Constants.EXTENSION,
         Language.findLanguageByID("TEXT"),
-        "", true, true, false, file
+        "", true, true, false, originalFile
     );
 
     return new PsiFileNode(project, psiFile, settings);
