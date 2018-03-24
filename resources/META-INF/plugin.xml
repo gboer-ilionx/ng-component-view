@@ -9,6 +9,7 @@
 
     <change-notes><![CDATA[
 <ul>
+    <li>Resizable views</li>
     <li>Added global settings for default view opening</li>
     <li>Fixed bug where component view is opened in wrong window</li>
     <li>Added less/scss extension support</li>
