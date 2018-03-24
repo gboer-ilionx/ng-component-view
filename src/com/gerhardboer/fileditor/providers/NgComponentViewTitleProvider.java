@@ -8,6 +8,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.testFramework.LightVirtualFile;
 import org.jetbrains.annotations.Nullable;
 
+import static com.gerhardboer.fileditor.ShortName.shortName;
+
 public class NgComponentViewTitleProvider implements EditorTabTitleProvider {
 
   @Nullable
@@ -17,7 +19,7 @@ public class NgComponentViewTitleProvider implements EditorTabTitleProvider {
     VirtualFile original = getFile(virtualFile);
 
     if (accept(editors)) {
-      return original.getParent().getName();
+      return shortName(virtualFile);
     }
 
     return original.getName();

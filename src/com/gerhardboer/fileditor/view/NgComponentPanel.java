@@ -3,6 +3,7 @@ package com.gerhardboer.fileditor.view;
 import com.gerhardboer.fileditor.FileType;
 import com.gerhardboer.fileditor.model.NgComponentEditor;
 import com.gerhardboer.fileditor.model.NgComponentEditorHolder;
+import com.gerhardboer.fileditor.state.NgComponentFileState;
 
 import org.jdesktop.swingx.JXMultiSplitPane;
 import org.jdesktop.swingx.MultiSplitLayout.Split;
@@ -14,34 +15,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class NgComponentPanel extends JPanel {
 
-    private JPanel main;
-    private NgComponentEditorHolder editors;
+  private JPanel main;
+  private NgComponentEditorHolder editors;
 
-    private Map<FileType, Boolean> fileState;
+  private NgComponentFileState fileState;
 
-    public NgComponentPanel(NgComponentEditorHolder editors,
-                            Map<FileType, Boolean> fileState) {
-        this.editors = editors;
-        this.main = new JPanel();
-        this.fileState = fileState;
+  public NgComponentPanel(NgComponentEditorHolder editors,
+                          NgComponentFileState fileState) {
+    this.editors = editors;
+    this.main = new JPanel();
+    this.fileState = fileState;
 
-        init();
-    }
+    init();
+  }
 
-    private void init() {
-        setBorderLayout();
+  private void init() {
+    setBorderLayout();
 
-        addMain();
-        addOptions();
-    }
+    addMain();
+    addOptions();
+  }
 
-    private void setBorderLayout() {
-        this.setLayout(new BorderLayout());
-    }
+  private void setBorderLayout() {
+    this.setLayout(new BorderLayout());
+  }
 
     private void addMain() {
         setView(main);
@@ -59,43 +59,45 @@ public class NgComponentPanel extends JPanel {
             panel.add(handleMultipleSizeList(editors));
         }
 
-        panel.updateUI();
+    panel.updateUI();
+  }
+
+  private void addOptions() {
+    JPanel options = new JPanel();
+    options.setLayout(new FlowLayout());
+    for (NgComponentEditor editor : this.editors.all) {
+      JCheckBox box = createHideShow(editor);
+      options.add(box);
     }
 
-    private void addOptions() {
-        JPanel options = new JPanel();
-        options.setLayout(new FlowLayout());
-        for (NgComponentEditor editor : this.editors.all) {
-            JCheckBox box = createHideShow(editor);
-            options.add(box);
-        }
+    this.add(options, BorderLayout.SOUTH);
+  }
 
-        this.add(options, BorderLayout.SOUTH);
-    }
+  private JCheckBox createHideShow(NgComponentEditor editor) {
 
-    private JCheckBox createHideShow(NgComponentEditor editor) {
+    JCheckBox box = new JCheckBox(editor.type);
 
-        JCheckBox box = new JCheckBox(editor.type);
+    String fileName = editor.fileName;
+    box.setActionCommand(fileName);
 
-        String fileName = editor.fileName;
-        box.setActionCommand(fileName);
-        box.setSelected(this.fileState.getOrDefault(fileName, true));
+    box.setSelected(this.fileState.get(fileName));
 
-        box.addActionListener(e -> {
-            JCheckBox box1 = (JCheckBox) e.getSource();
-            editor.active = box1.isSelected();
-            updateState(fileName, editor.active);
+    box.addActionListener(e -> {
+      JCheckBox box1 = (JCheckBox) e.getSource();
+      editor.active = box1.isSelected();
+      updateState(fileName, editor.active);
 
-            recalculateContent();
-        });
+      recalculateContent();
+    });
 
-        return box;
-    }
+    return box;
+  }
 
-    private void updateState(String name, boolean newState) {
-        FileType.forFileName(name).map(fileType ->
-                this.fileState.put(fileType, newState));
-    }
+  private void updateState(String name, boolean newState) {
+    FileType.forFileName(name).map(fileType ->
+        this.fileState.put(fileType, newState)
+    );
+  }
 
     private void recalculateContent() {
         this.main.removeAll();
