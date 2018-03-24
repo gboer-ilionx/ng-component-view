@@ -77,7 +77,6 @@ public class NgComponentGlobalOptionsPanel {
     componentView.setSelected(model.isComponentViewSelected());
     stylesView.setSelected(model.isStylesViewSelected());
     specView.setSelected(model.isSpecViewSelected());
-
   }
 
   public void save(NgComponentGlobalSettings model) {

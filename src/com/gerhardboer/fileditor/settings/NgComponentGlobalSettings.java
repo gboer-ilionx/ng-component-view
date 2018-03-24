@@ -29,10 +29,7 @@ import org.jetbrains.annotations.NotNull;
 @State(
     name = "NgComponentGlobalSettings",
     storages = {
-        @Storage(
-            id = "ng-component-view",
-            value = "ng-component-view.xml"
-        )
+        @Storage("ng-component-view.xml")
     }
 )
 public final class NgComponentGlobalSettings implements ApplicationComponent, PersistentStateComponent<NgComponentGlobalSettings> {
