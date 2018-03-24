@@ -43,21 +43,21 @@ public class NgComponentPanel extends JPanel {
     this.setLayout(new BorderLayout());
   }
 
-    private void addMain() {
-        setView(main);
-        add(this.main, BorderLayout.CENTER);
+  private void addMain() {
+    setView(main);
+    add(this.main, BorderLayout.CENTER);
+  }
+
+  private void setView(JComponent panel) {
+    List<NgComponentEditor> editors = this.editors.activeWindows();
+    panel.setLayout(new BorderLayout());
+
+    // When there is just one editor we don't need MultiSplit
+    if (editors.size() == 1) {
+      panel.add(oneView(editors));
+    } else {
+      panel.add(multipleViews(editors));
     }
-
-    private void setView(JComponent panel) {
-        List<NgComponentEditor> editors = this.editors.activeWindows();
-        panel.setLayout(new BorderLayout());
-
-        // When there is just one editor we don't need MultiSplit
-        if (editors.size() == 1) {
-            panel.add(handleOneSizeList(editors));
-        } else {
-            panel.add(handleMultipleSizeList(editors));
-        }
 
     panel.updateUI();
   }
@@ -99,42 +99,56 @@ public class NgComponentPanel extends JPanel {
     );
   }
 
-    private void recalculateContent() {
-        this.main.removeAll();
-        setView(this.main);
+  private void recalculateContent() {
+    this.main.removeAll();
+    setView(this.main);
+  }
+
+  private JComponent oneView(List<NgComponentEditor> editors) {
+    return editors.get(0).view;
+  }
+
+  // Source for the idea of multisplitpane
+  // https://stackoverflow.com/questions/6117826/jxmultisplitpane-how-to-use
+  // NOTE setWeight does not work
+  private JXMultiSplitPane multipleViews(List<NgComponentEditor> editors) {
+    List<Node> viewNodes = createViewNodes(editors);
+    Split split = createSplit(viewNodes);
+
+    JXMultiSplitPane sp = new JXMultiSplitPane();
+    sp.setModel(split);
+
+    editors.forEach(
+        (NgComponentEditor editor) -> sp.add(editor.view, editor.fileName)
+    );
+
+    return sp;
+  }
+
+  private Split createSplit(List<Node> viewNodes) {
+    Split split = new Split();
+    split.setChildren(viewNodes);
+    return split;
+  }
+
+  private List<Node> createViewNodes(List<NgComponentEditor> editors) {
+    // This calculates the width (weight) of the leaf. 100 / 4 / 100 = 0.25 (25%)
+    double preferredSize = (double) 100 / editors.size() / 100;
+
+    // Keep track of the leafs in a List, to set later on on the split
+    List<Node> nodeList = new ArrayList<>();
+    for (int i = 0; i < editors.size(); i++) {
+      NgComponentEditor editor = editors.get(i);
+
+      Leaf leaf = new Leaf(editor.fileName);
+      leaf.setWeight(preferredSize);
+
+      nodeList.add(leaf);
+      // After the last leaf is added, a divider is no longer needed
+      if (i != (editors.size() - 1)) {
+        nodeList.add(new Divider());
+      }
     }
-
-    private JComponent handleOneSizeList(List<NgComponentEditor> editors) {
-        return editors.get(0).view;
-    }
-
-    // Source for the idea of multisplitpane
-    // https://stackoverflow.com/questions/6117826/jxmultisplitpane-how-to-use
-    // NOTE setWeight does not work
-
-    private JXMultiSplitPane handleMultipleSizeList(List<NgComponentEditor> editors) {
-        JXMultiSplitPane sp = new JXMultiSplitPane();
-
-        Split split = new Split();
-        sp.setModel(split);
-        // Keep track of the leafs in a List, to set later on on the split
-        List<Node> nodeList = new ArrayList<>();
-        // This calculates the width (weight) of the leaf. 100 / 4 / 100 = 0.25 (25%)
-        double preferredSize = (double) 100 / editors.size() / 100;
-
-        for (int i = 0; i < editors.size(); i++) {
-            sp.add(editors.get(i).view, editors.get(i).fileName);
-            Leaf leaf = new Leaf(editors.get(i).fileName);
-            // Set the weight for the leaf
-            leaf.setWeight(preferredSize);
-            nodeList.add(leaf);
-            // After the last leaf is added, a divider is no longer needed
-            if (i != (editors.size() - 1)) {
-                nodeList.add(new Divider());
-            }
-        }
-
-        split.setChildren(nodeList);
-        return sp;
-    }
+    return nodeList;
+  }
 }
